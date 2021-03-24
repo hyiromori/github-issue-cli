@@ -1,6 +1,6 @@
 import parser from "https://deno.land/x/yargs_parser@v20.2.7-deno/deno.ts";
 
-const coreCommand = Deno.args[0] ?? "help";
+export const coreCommand = Deno.args[0] ?? "help";
 const parsedArgs = parser(Deno.args.slice(1));
 
 const toBoolean = (value: unknown, defaultValue: boolean): boolean =>
