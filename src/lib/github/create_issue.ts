@@ -3,17 +3,16 @@ import { verbose } from "../args.ts";
 
 const GitHubURL = "https://api.github.com";
 
-export interface CreateIssueData {
-  title: string;
-  labels?: string[];
+export interface IssueData {
+  html_url: string;
 }
 
 // https://docs.github.com/en/rest/reference/issues#create-an-issue
 export const createIssue = async (
   owner: string,
   repository: string,
-  data: CreateIssueData,
-): Promise<void> => {
+  title: string,
+): Promise<IssueData> => {
   const path = `/repos/${owner}/${repository}/issues`;
   const response = await fetch(`${GitHubURL}${path}`, {
     method: "POST",
@@ -21,14 +20,18 @@ export const createIssue = async (
       Authorization: `token ${getGitHubAccessToken()}`,
       Accept: "application/vnd.github.v3+json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ title }),
   });
 
   if (!response.ok) {
-    throw new Error("GitHub の Issue データの更新に失敗しました。");
+    throw new Error("GitHub Issue の作成に失敗しました。");
   }
+
+  const issue: IssueData = await response.json();
+  console.log("Created Issue: %s", issue.html_url);
   if (verbose()) {
-    const responseData = await response.json();
-    console.log("Response data:", JSON.stringify(responseData, null, 2));
+    console.log("Response data:", JSON.stringify(issue, null, 2));
   }
+
+  return issue;
 };

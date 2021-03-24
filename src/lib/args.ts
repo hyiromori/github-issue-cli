@@ -65,13 +65,14 @@ const args: Args = {
 
 export const getCoreCommand = (): string => coreCommand;
 export const verbose = (): boolean => args.verbose;
-export const getRepository = (): string => requireString(args.repository, "--repository")
-export const getEpicUrl = (): string =>
-  requireString(args.epicUrl, "--epic-url");
+export const getOwner = (): string => requireString(args.owner, "--owner");
+export const getRepository = (): string =>
+  requireString(args.repository, "--repository");
 export const getTitle = (): string => requireString(args.title, "--title");
-export const getLabels = (): string[] => requireArray(args.labels, "--label");
-export const getPipeline = (): string =>
-  requireString(args.pipeline, "--pipeline");
 export const getUrls = (): string[] => requireArray(args.urls, "--url");
 export const getWorkspace = (): string =>
   requireString(args.workspace, "--string");
+
+export const getLabels = (): string[] | null => args.labels;
+export const getPipeline = (): string | null => args.pipeline;
+export const getEpicUrl = (): string | null => args.epicUrl;

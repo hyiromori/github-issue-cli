@@ -22,19 +22,12 @@ export const update = async (): Promise<void> => {
     const epicUrl = getEpicUrl();
     const pipeline = getPipeline();
     if (pipeline != null || epicUrl != null) {
-      const workspaceId = getWorkspace();
-      if (workspaceId == null) {
-        throw new Error(
-          "ZenHub のデータを更新する場合は --workspace [workspace_id] を指定してください。",
-        );
-      }
-
       if (pipeline != null) {
         await movePipeline({
           issueNumber: issue.issueNumber,
           organization: issue.organization,
           repository: issue.repository,
-          workspaceId,
+          workspaceId: getWorkspace(),
           pipeline,
         });
       }
