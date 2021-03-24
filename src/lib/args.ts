@@ -1,4 +1,5 @@
 interface Args {
+  command: string;
   verbose: boolean;
   labels: string[] | null;
   pipeline: string | null;
@@ -8,6 +9,7 @@ interface Args {
 }
 
 const args: Args = {
+  command: "help",
   verbose: false,
   labels: null,
   pipeline: null,
@@ -16,7 +18,9 @@ const args: Args = {
   urls: [],
 }
 
-for (let i = 0; i < Deno.args.length; i++) {
+args.command = Deno.args[0] ?? "help"
+
+for (let i = 1; i < Deno.args.length; i++) {
   const arg: string = Deno.args[i]
   const next: string | undefined = Deno.args[i + 1]
   switch (arg) {
@@ -52,10 +56,6 @@ for (let i = 0; i < Deno.args.length; i++) {
       args.labels = next.split(",")
       i++
       break;
-    case "--help":
-      // TODO: show usage
-      console.log("See: https://github.com/hyiromori/github-update-issue/blob/main/README.md")
-      Deno.exit(0)
     default:
       if (arg.startsWith("https://")) {
         args.urls.push(arg)
@@ -65,12 +65,8 @@ for (let i = 0; i < Deno.args.length; i++) {
   }
 }
 
-if (args.urls.length === 0) {
-  throw new Error("URLが指定されていません。")
-}
-
 export const verbose = (): boolean => args.verbose
-
+export const getCommand = (): string => args.command
 export const getEpicUrl = (): string | null => args.epicUrl
 export const getLabels = (): string[] | null => args.labels
 export const getPipeline = (): string | null => args.pipeline
