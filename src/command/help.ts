@@ -17,7 +17,7 @@ const usage = () =>
     "  --owner <GitHub Repository Owner>",
     "  --repository <GitHub Repository Name>",
     "  --urls <GitHub Issue URL>",
-    "  --workspace <ZenHub Workspace Name>",
+    "  --workspace <ZenHub Workspace ID>",
     "  --pipeline <ZenHub Pipeline Name>",
     "  --verbose",
     "",
