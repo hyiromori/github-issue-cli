@@ -1,7 +1,7 @@
+use crate::zenhub::structs::Workspace;
 use crate::zenhub::zenhub_api::get_zenhub_api;
 use serde::Deserialize;
 use std::io::{Error, ErrorKind};
-use crate::zenhub::structs::Workspace;
 
 pub async fn get_zenhub_workspaces(
     repo_id: &String,
