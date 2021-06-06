@@ -43,7 +43,7 @@ pub async fn config(_args: &Vec<String>) -> Result<(), Box<dyn std::error::Error
                 workspace_name = val.name,
                 workspace_id = val.id
             );
-            write_config(&Config {
+            let _ = write_config(&Config {
                 workspace_id: String::from(&val.id),
                 workspace_name: String::from(&val.name),
             });

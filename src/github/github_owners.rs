@@ -1,10 +1,6 @@
-#[macro_use]
-use base64::decode;
 use crate::github::github_api::request_github_graphql_api;
 use crate::github::structs::{Owner, OwnerType};
-use regex::Regex;
-use serde::{Deserialize, Serialize};
-use std::fmt;
+use serde::{Deserialize};
 use std::io::{Error, ErrorKind};
 
 #[derive(Deserialize, Debug)]

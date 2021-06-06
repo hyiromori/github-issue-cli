@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::prelude::*;
-use std::io::{BufReader, Error, Read};
+use std::io::{BufReader, Read};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
@@ -20,7 +20,7 @@ pub fn read_config() -> Option<Config> {
         Ok(val) => {
             let mut buf_reader = BufReader::new(val);
             let mut contents = String::new();
-            buf_reader.read_to_string(&mut contents);
+            let _ = buf_reader.read_to_string(&mut contents);
             let config = serde_json::from_str(contents.as_str());
             match config {
                 Ok(val) => Some(val),

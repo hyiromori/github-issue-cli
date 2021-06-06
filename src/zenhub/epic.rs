@@ -1,6 +1,6 @@
-use crate::zenhub::structs::{EpicIssue, ZenHubIssue};
-use crate::zenhub::zenhub_api::{get_zenhub_api, post_zenhub_api};
-use serde::{Deserialize, Serialize};
+use crate::zenhub::structs::EpicIssue;
+use crate::zenhub::zenhub_api::get_zenhub_api;
+use serde::Deserialize;
 use std::io::{Error, ErrorKind};
 
 #[derive(Deserialize, Debug)]

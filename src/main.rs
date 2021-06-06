@@ -4,18 +4,18 @@ mod util;
 mod zenhub;
 
 extern crate dirs;
-use crate::github::github_issue::get_github_issue;
-use crate::github::github_owners::get_github_owners;
-use crate::github::github_repo::get_github_repos;
-use crate::github::structs::Owner;
+use std::env;
 use crate::subcommand::config::config;
-use crate::util::config::{get_config_file_path, read_config, write_config, Config};
-use crate::zenhub::board::get_board;
-use crate::zenhub::epic::get_epic_issues;
-use crate::zenhub::structs::Board;
-use crate::zenhub::workspace::get_zenhub_workspaces;
-use crate::zenhub::zenhub_issue::{get_zenhub_issue, move_pipeline};
-use std::{env, fmt};
+// use crate::github::github_issue::get_github_issue;
+// use crate::github::github_owners::get_github_owners;
+// use crate::github::github_repo::get_github_repos;
+// use crate::github::structs::Owner;
+// use crate::util::config::{get_config_file_path, read_config, write_config, Config};
+// use crate::zenhub::board::get_board;
+// use crate::zenhub::epic::get_epic_issues;
+// use crate::zenhub::structs::Board;
+// use crate::zenhub::workspace::get_zenhub_workspaces;
+// use crate::zenhub::zenhub_issue::{get_zenhub_issue, move_pipeline};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

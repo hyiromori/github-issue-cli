@@ -1,5 +1,5 @@
 #![allow(non_snake_case)]
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::fmt;
 
 #[derive(Clone, Debug)]
@@ -30,7 +30,6 @@ impl fmt::Display for OwnerType {
         match *self {
             OwnerType::User => f.write_str("User"),
             OwnerType::Organization => f.write_str("Organization"),
-            _ => f.write_str("Unknown"),
         }
     }
 }

@@ -1,6 +1,6 @@
 use crate::zenhub::structs::ZenHubIssue;
 use crate::zenhub::zenhub_api::{get_zenhub_api, post_zenhub_api};
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::io::{Error, ErrorKind};
 
 pub async fn get_zenhub_issue(
