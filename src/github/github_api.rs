@@ -37,3 +37,25 @@ pub async fn request_github_graphql_api<T: Serialize>(
 
     Ok(res)
 }
+
+// https://developer.github.com/v3/
+pub async fn get_github_api_v3(path: &String) -> Result<Response, Box<dyn std::error::Error>> {
+    let url = format!(
+        "{base}{path}",
+        base = "https://api.github.com",
+        path = &path
+    );
+
+    let res = reqwest::Client::new()
+        .get(url)
+        .header("User-Agent", "mryhryki/github-issue-cli")
+        .header("Accept", "application/vnd.github.v3+json")
+        .header("Authorization", get_authorization_header_for_github())
+        .send()
+        .await?;
+    if res.status() != 200 {
+        println!("{:#?}", res.status());
+    }
+
+    Ok(res)
+}

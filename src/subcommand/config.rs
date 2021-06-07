@@ -26,12 +26,7 @@ pub async fn config(_args: &Vec<String>) -> Result<(), Box<dyn std::error::Error
     }
     let workspace = workspace.unwrap();
 
-    let _ = write_config(&Config {
-        repo_id: String::from(&repo.get_repo_id()),
-        repo_name: String::from(&repo.name),
-        workspace_id: String::from(&workspace.id),
-        workspace_name: String::from(&workspace.name),
-    });
+    let _ = write_config(&Config { workspace });
     println!("Config saved: {}", get_config_file_path());
 
     Ok(())

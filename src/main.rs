@@ -36,5 +36,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    panic!(format!("Undefined subcommand: {:?}", subcommand));
+    panic!("Undefined subcommand: {:?}", subcommand);
 }

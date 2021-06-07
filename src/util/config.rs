@@ -1,3 +1,4 @@
+use crate::zenhub::structs::Workspace;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::prelude::*;
@@ -5,10 +6,7 @@ use std::io::{BufReader, Read};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    pub repo_name: String,
-    pub repo_id: String,
-    pub workspace_id: String,
-    pub workspace_name: String,
+    pub workspace: Workspace,
 }
 
 pub fn get_config_file_path() -> String {

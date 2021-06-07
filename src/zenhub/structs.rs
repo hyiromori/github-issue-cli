@@ -1,10 +1,11 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Workspace {
     pub name: String,
     pub id: String,
+    pub repositories: Vec<i32>,
 }
 
 impl fmt::Display for Workspace {

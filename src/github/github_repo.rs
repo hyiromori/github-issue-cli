@@ -1,8 +1,7 @@
 #![allow(non_snake_case)]
-use crate::github::github_api::request_github_graphql_api;
-use crate::github::structs::{Owner, OwnerType};
-use base64::decode;
-use regex::Regex;
+use crate::github::github_api::{get_github_api_v3, request_github_graphql_api};
+use crate::github::structs::{Owner, OwnerForRepo, OwnerType, Repository};
+use base64::{decode, encode};
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::io::{Error, ErrorKind};
@@ -35,39 +34,6 @@ pub struct UserOrOrganizationData {
 #[derive(Deserialize, Debug)]
 pub struct Repositories {
     nodes: Vec<Repository>,
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct Repository {
-    id: String,
-    pub name: String,
-    pub owner: OwnerForRepo,
-}
-
-impl fmt::Display for Repository {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{owner}/{name}",
-            owner = self.owner.login,
-            name = self.name
-        )
-    }
-}
-
-impl Repository {
-    pub fn get_repo_id(&self) -> String {
-        let raw_id = String::from_utf8(decode(&self.id).unwrap()).unwrap();
-        let regex = Regex::new(r":Repository(?P<repo_id>\d+)$").unwrap();
-        let caps = regex.captures(&raw_id).unwrap();
-        let repo_id = &caps["repo_id"];
-        String::from(repo_id)
-    }
-}
-
-#[derive(Deserialize, Clone, Debug)]
-pub struct OwnerForRepo {
-    pub login: String,
 }
 
 #[derive(Serialize, Clone, Debug)]
@@ -120,6 +86,28 @@ pub async fn get_github_repos(
             let data = response.json::<OrganizationResponse>().await?;
             data.data.organization.repositories.nodes
         }
+    };
+    Ok(data)
+}
+
+#[derive(Deserialize)]
+struct RepositoryForApiV3 {
+    id: i32,
+    name: String,
+    owner: OwnerForRepo,
+}
+
+pub async fn get_github_repo_by_id(
+    repo_id: &i32,
+) -> Result<Repository, Box<dyn std::error::Error>> {
+    let path = format!("/repositories/{repo_id}", repo_id = &repo_id);
+    let res = get_github_api_v3(&path).await?;
+    let temp_data = res.json::<RepositoryForApiV3>().await?;
+
+    let data = Repository {
+        id: encode(format!("000:Repository{id}", id = temp_data.id)),
+        name: temp_data.name,
+        owner: temp_data.owner,
     };
     Ok(data)
 }

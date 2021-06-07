@@ -1,3 +1,4 @@
+use crate::github::github_repo::get_github_repo_by_id;
 use crate::util::config::Config;
 use crate::util::select::select_in_menu;
 use crate::zenhub::board::get_pipelines;
@@ -22,9 +23,13 @@ pub async fn board(config: &Config, _args: &Vec<String>) -> Result<(), Box<dyn s
 
     match action {
         BoardAction::Pipeline => {
-            let pipelines = get_pipelines(&config.workspace_id, &config.repo_id).await?;
+            let repositories = &config.workspace.repositories;
+            let repo = get_github_repo_by_id(repositories.first().unwrap()).await?;
+            println!("{:#?}", repo);
+
+            let pipelines = get_pipelines(&config.workspace.id, &repo.get_repo_id()).await?;
             let pipeline = select_in_menu(&String::from("Select pipeline"), &pipelines);
-            println!("{:?}", pipeline);
+            println!("{:#?}", pipeline);
         }
     };
 
