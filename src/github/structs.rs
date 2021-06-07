@@ -1,6 +1,4 @@
 #![allow(non_snake_case)]
-use base64::decode;
-use regex::Regex;
 use serde::Deserialize;
 use std::fmt;
 
@@ -38,7 +36,7 @@ impl fmt::Display for OwnerType {
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Repository {
-    pub id: String,
+    pub id: i32,
     pub name: String,
     pub owner: OwnerForRepo,
 }
@@ -51,16 +49,6 @@ impl fmt::Display for Repository {
             owner = self.owner.login,
             name = self.name
         )
-    }
-}
-
-impl Repository {
-    pub fn get_repo_id(&self) -> String {
-        let raw_id = String::from_utf8(decode(&self.id).unwrap()).unwrap();
-        let regex = Regex::new(r":Repository(?P<repo_id>\d+)$").unwrap();
-        let caps = regex.captures(&raw_id).unwrap();
-        let repo_id = &caps["repo_id"];
-        String::from(repo_id)
     }
 }
 

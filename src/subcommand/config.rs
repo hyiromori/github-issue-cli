@@ -19,7 +19,7 @@ pub async fn config(_args: &Vec<String>) -> Result<(), Box<dyn std::error::Error
     }
     let repo = repo.unwrap();
 
-    let workspaces = get_zenhub_workspaces(&repo.get_repo_id()).await?;
+    let workspaces = get_zenhub_workspaces(&repo.id).await?;
     let workspace = select_in_menu(&String::from("Select ZenHub workspace"), &workspaces);
     if workspace.is_none() {
         panic!("Workspace not found or unselected.")

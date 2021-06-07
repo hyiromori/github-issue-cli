@@ -2,6 +2,7 @@
 use crate::github::github_api::{get_github_api_v3, request_github_graphql_api};
 use crate::github::structs::{Owner, OwnerForRepo, OwnerType, Repository};
 use base64::{decode, encode};
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::io::{Error, ErrorKind};
@@ -33,7 +34,24 @@ pub struct UserOrOrganizationData {
 
 #[derive(Deserialize, Debug)]
 pub struct Repositories {
-    nodes: Vec<Repository>,
+    nodes: Vec<RepositoryForGraphQL>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct RepositoryForGraphQL {
+    pub id: String,
+    pub name: String,
+    pub owner: OwnerForRepo,
+}
+
+impl RepositoryForGraphQL {
+    pub fn get_repo_id(&self) -> i32 {
+        let raw_id = String::from_utf8(decode(&self.id).unwrap()).unwrap();
+        let regex = Regex::new(r":Repository(?P<repo_id>\d+)$").unwrap();
+        let caps = regex.captures(&raw_id).unwrap();
+        let repo_id = &caps["repo_id"];
+        String::from(repo_id).parse::<i32>().unwrap()
+    }
 }
 
 #[derive(Serialize, Clone, Debug)]
@@ -74,10 +92,7 @@ pub async fn get_github_repos(
             "Failed get_github_repo_id",
         )));
     }
-    // let data = response.text().await?;
-    // println!("{:?}", data);
-    // Ok(vec![])
-    let data: Vec<Repository> = match owner.owner_type {
+    let data: Vec<RepositoryForGraphQL> = match owner.owner_type {
         OwnerType::User => {
             let data = response.json::<UserResponse>().await?;
             data.data.user.repositories.nodes
@@ -87,14 +102,17 @@ pub async fn get_github_repos(
             data.data.organization.repositories.nodes
         }
     };
-    Ok(data)
-}
 
-#[derive(Deserialize)]
-struct RepositoryForApiV3 {
-    id: i32,
-    name: String,
-    owner: OwnerForRepo,
+    let data: Vec<Repository> = data
+        .iter()
+        .map(|repo| Repository {
+            id: repo.get_repo_id(),
+            name: repo.name.clone(),
+            owner: repo.owner.clone(),
+        })
+        .collect();
+
+    Ok(data)
 }
 
 pub async fn get_github_repo_by_id(
@@ -102,12 +120,6 @@ pub async fn get_github_repo_by_id(
 ) -> Result<Repository, Box<dyn std::error::Error>> {
     let path = format!("/repositories/{repo_id}", repo_id = &repo_id);
     let res = get_github_api_v3(&path).await?;
-    let temp_data = res.json::<RepositoryForApiV3>().await?;
-
-    let data = Repository {
-        id: encode(format!("000:Repository{id}", id = temp_data.id)),
-        name: temp_data.name,
-        owner: temp_data.owner,
-    };
+    let data = res.json::<Repository>().await?;
     Ok(data)
 }

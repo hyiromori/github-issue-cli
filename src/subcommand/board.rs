@@ -27,7 +27,7 @@ pub async fn board(config: &Config, _args: &Vec<String>) -> Result<(), Box<dyn s
             let repo = get_github_repo_by_id(repositories.first().unwrap()).await?;
             println!("{:#?}", repo);
 
-            let pipelines = get_pipelines(&config.workspace.id, &repo.get_repo_id()).await?;
+            let pipelines = get_pipelines(&config.workspace.id, &repo.id).await?;
             let pipeline = select_in_menu(&String::from("Select pipeline"), &pipelines);
             println!("{:#?}", pipeline);
         }

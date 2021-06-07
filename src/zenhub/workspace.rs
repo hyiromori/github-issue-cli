@@ -3,7 +3,7 @@ use crate::zenhub::zenhub_api::get_zenhub_api;
 use std::io::{Error, ErrorKind};
 
 pub async fn get_zenhub_workspaces(
-    repo_id: &String,
+    repo_id: &i32,
 ) -> Result<Vec<Workspace>, Box<dyn std::error::Error>> {
     // https://github.com/ZenHubIO/API#get-zenhub-workspaces-for-a-repository
     let path = format!("/p2/repositories/{}/workspaces", repo_id);

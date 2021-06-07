@@ -10,7 +10,7 @@ struct ResponseData {
 
 pub async fn get_pipelines(
     workspace_id: &String,
-    repo_id: &String,
+    repo_id: &i32,
 ) -> Result<Vec<Pipeline>, Box<dyn std::error::Error>> {
     // https://github.com/ZenHubIO/API#get-a-zenhub-board-for-a-repository
     let path = format!(
