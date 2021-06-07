@@ -4,8 +4,8 @@ mod util;
 mod zenhub;
 
 extern crate dirs;
-use std::env;
 use crate::subcommand::config::config;
+use std::env;
 // use crate::github::github_issue::get_github_issue;
 // use crate::github::github_owners::get_github_owners;
 // use crate::github::github_repo::get_github_repos;

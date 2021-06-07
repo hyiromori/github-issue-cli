@@ -1,6 +1,6 @@
 use crate::github::github_api::request_github_graphql_api;
 use crate::github::structs::{Owner, OwnerType};
-use serde::{Deserialize};
+use serde::Deserialize;
 use std::io::{Error, ErrorKind};
 
 #[derive(Deserialize, Debug)]

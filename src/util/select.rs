@@ -1,13 +1,20 @@
+use dialoguer::{theme::ColorfulTheme, Select};
 use std::fmt;
 
 pub fn select_in_menu<T: fmt::Display + Clone>(
-    _description: &String,
+    description: &String,
     collection: &Vec<T>,
 ) -> Option<T> {
     if collection.is_empty() {
         return None;
     }
-    let mut menu = youchoose::Menu::new(collection.iter());
-    let index: usize = menu.show().first().unwrap().clone();
+    let index: usize = Select::with_theme(&ColorfulTheme::default())
+        .with_prompt(description.as_str())
+        .default(0)
+        .items(&collection)
+        .paged(true)
+        .interact_opt()
+        .unwrap()
+        .unwrap();
     Some(collection[index].clone())
 }
